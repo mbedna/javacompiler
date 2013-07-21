@@ -10,6 +10,7 @@ import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
+import java.io.IOException;
 
 /**
  * Dynamic compilation API class.
@@ -23,10 +24,6 @@ public class Compiler {
 
     public Compiler() {
 		this.compiler = ToolProvider.getSystemJavaCompiler();
-		/**
-		 * The same file manager can be reopened for another compiler task. 
-		 * Thus we reduce the overhead of scanning through file system and jar files each time 
-		 */
     }
 
 	public static void main(String args[]) {
@@ -36,6 +33,10 @@ public class Compiler {
 	
 	public String compile(CompilerParams params) {
         long begin = System.currentTimeMillis();
+		/**
+		 * The same file manager can be reopened for another compiler task. 
+		 * Thus we reduce the overhead of scanning through file system and jar files each time 
+		 */
 		StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, Locale.getDefault(), null);
         Iterable<? extends JavaFileObject> fileObjects = fileManager.getJavaFileObjectsFromStrings(params.getFiles());
 		
@@ -45,6 +46,7 @@ public class Compiler {
 		boolean status = compilerTask.call();
         String output = "";
 		if (!status) {
+            System.out.println("Compilation failed");
 			for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
 				//System.out.format("Error on line %d in %s", diagnostic.getLineNumber(), diagnostic);
                 output += diagnostic.toString() + "\n";
@@ -53,11 +55,11 @@ public class Compiler {
             output = "Compilation successful";
         } 
         System.out.println(output);
-//		try {
-//			fileManager.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			fileManager.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         long end = System.currentTimeMillis();
         System.out.println("Compilation time: " + (end - begin) + " millis.");
         return output;

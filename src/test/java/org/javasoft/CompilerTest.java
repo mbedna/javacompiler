@@ -11,7 +11,8 @@ import java.io.FileOutputStream;
  */
 public class CompilerTest {
 
-    private String fileName;
+    private String TEMP_DIR = System.getProperty("java.io.tmpdir");
+    private String fileName =  TEMP_DIR + "/SampleJavaClass.java";
 
     private StringBuilder javaCode = new StringBuilder("package sample;\n")
                                                     .append("\n")
@@ -27,13 +28,12 @@ public class CompilerTest {
 	}
 
     private void givenJavaFile() throws IOException  {
-        this.fileName = System.getProperty("java.io.tmpdir") + "/SampleJavaClass.java";
         writeStringToFile(createTempFile(), javaCode.toString());
     }
 
     private File createTempFile() throws IOException {
         File temp = new File(fileName); 
-//        temp.deleteOnExit();
+        temp.deleteOnExit();
         System.out.println("Temp file : " + temp.getAbsolutePath());
         return temp;
     }

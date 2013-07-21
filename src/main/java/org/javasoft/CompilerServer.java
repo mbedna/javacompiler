@@ -26,7 +26,9 @@ public class CompilerServer extends Thread {
            e.printStackTrace();
         }
     }
-
+    /*
+     *   If using relative paths then start javacServer in project directory
+     */
     public void run() {
         String output = "";
         while(true) {
