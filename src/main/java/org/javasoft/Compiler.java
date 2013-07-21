@@ -20,7 +20,6 @@ public class Compiler {
 
     private JavaCompiler compiler;
 
-    private StandardJavaFileManager fileManager;
 
     public Compiler() {
 		this.compiler = ToolProvider.getSystemJavaCompiler();
@@ -28,7 +27,6 @@ public class Compiler {
 		 * The same file manager can be reopened for another compiler task. 
 		 * Thus we reduce the overhead of scanning through file system and jar files each time 
 		 */
-		 this.fileManager = compiler.getStandardFileManager(null, Locale.getDefault(), null);
     }
 
 	public static void main(String args[]) {
@@ -38,6 +36,7 @@ public class Compiler {
 	
 	public String compile(CompilerParams params) {
         long begin = System.currentTimeMillis();
+		StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, Locale.getDefault(), null);
         Iterable<? extends JavaFileObject> fileObjects = fileManager.getJavaFileObjectsFromStrings(params.getFiles());
 		
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
