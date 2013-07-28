@@ -41,7 +41,7 @@ public class Compiler {
         Iterable<? extends JavaFileObject> fileObjects = fileManager.getJavaFileObjectsFromStrings(params.getFiles());
 		
 		DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
-		
+
 		CompilationTask compilerTask = compiler.getTask(null, fileManager, diagnostics, params.getOptions(), null, fileObjects);
 		boolean status = compilerTask.call();
         String output = "";
