@@ -4,6 +4,7 @@ import java.net.Socket;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.DataInputStream;
+import java.net.ConnectException;
 
 public class CompilerClient {
 
@@ -26,6 +27,8 @@ public class CompilerClient {
             DataInputStream in = new DataInputStream(client.getInputStream());
             System.out.println(in.readUTF());
             client.close();
+        } catch(ConnectException e) {
+            System.out.println("Can't connect to server :0: Please check whether it is started");
         } catch(IOException e) {
            e.printStackTrace();
         }
